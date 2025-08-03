@@ -33,7 +33,7 @@ interface ControlPanelProps {
 }
 
 // Beta status for experimental features
-const BETA_TABS = new Set<TabType>(['service-status', 'local-providers', 'mcp']);
+const BETA_TABS = new Set<TabType>(['service-status', 'local-providers', 'mcp', 'task-manager']);
 
 const BetaLabel = () => (
   <div className="absolute top-2 right-2 px-1.5 py-0.5 rounded-full bg-purple-500/10 dark:bg-purple-500/20">
@@ -287,7 +287,7 @@ export const ControlPanel = ({ open, onClose }: ControlPanelProps) => {
                           <div
                             key={tab.id}
                             className={classNames(
-                              'w-44 h-44 transition-all duration-200 ease-out',
+                              'w-40 h-40 transition-all duration-200 ease-out',
                               'hover:scale-[1.02] hover:shadow-lg',
                             )}
                             style={{

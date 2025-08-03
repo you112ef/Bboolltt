@@ -59,7 +59,7 @@ export const TabTile: React.FC<TabTileProps> = ({
                 <div
                   className={classNames(
                     'relative',
-                    'w-16 h-16',
+                    'w-14 h-14',
                     'flex items-center justify-center',
                     'rounded-2xl',
                     'bg-gray-800 dark:bg-gray-700',
@@ -73,7 +73,7 @@ export const TabTile: React.FC<TabTileProps> = ({
                   <div
                     className={classNames(
                       TAB_ICONS[tab.id],
-                      'w-8 h-8',
+                      'w-7 h-7',
                       'text-gray-300 dark:text-gray-200',
                       'group-hover:text-purple-400 dark:group-hover:text-purple-300',
                       'transition-colors duration-200 ease-out',
@@ -83,10 +83,10 @@ export const TabTile: React.FC<TabTileProps> = ({
                 </div>
 
                 {/* Label and Description */}
-                <div className="flex flex-col items-center mt-4 w-full">
+                <div className="flex flex-col items-center mt-3 w-full">
                   <h3
                     className={classNames(
-                      'text-base font-semibold leading-snug mb-2',
+                      'text-sm font-semibold leading-snug mb-1',
                       'text-gray-200 dark:text-gray-100',
                       'group-hover:text-purple-300 dark:group-hover:text-purple-200',
                       'transition-colors duration-200 ease-out',
@@ -98,9 +98,9 @@ export const TabTile: React.FC<TabTileProps> = ({
                   {description && (
                     <p
                       className={classNames(
-                        'text-sm leading-relaxed',
+                        'text-xs leading-relaxed',
                         'text-gray-400 dark:text-gray-300',
-                        'max-w-[90%]',
+                        'max-w-[95%]',
                         'text-center',
                         'group-hover:text-purple-400/80 dark:group-hover:text-purple-300/80',
                         'transition-colors duration-200 ease-out',
