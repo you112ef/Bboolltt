@@ -44,6 +44,11 @@ export interface EditorSettings {
   fontSize?: string;
   gutterFontSize?: string;
   tabSize?: number;
+  wordWrap?: boolean;
+  showLineNumbers?: boolean;
+  highlightSelectionMatches?: boolean;
+  autoCloseBrackets?: boolean;
+  enableVimMode?: boolean;
 }
 
 type TextEditorDocument = EditorDocument & {
