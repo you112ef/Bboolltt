@@ -605,7 +605,8 @@ export async function action({ request }: ActionFunctionArgs): Promise<Response>
       includeDotFiles = true,
       compressionLevel = 6,
       excludePatterns = [],
-      includeDocumentation: _includeDocumentation = true,
+
+      // includeDocumentation = true, // Currently unused
       generateReadme = true,
       addLicense,
       addGitignore = true,
