@@ -1,7 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { classNames } from '~/utils/classNames';
+import * as RadixDialog from '@radix-ui/react-dialog';
 
 const ServicesTab: React.FC = () => {
+  const [showDeployModal, setShowDeployModal] = useState(false);
+  const [selectedPlatform, setSelectedPlatform] = useState('');
+  const [deploySettings, setDeploySettings] = useState({
+    autoDeploy: true,
+    previewUrls: true,
+    analytics: false,
+    customDomain: '',
+    environment: 'production'
+  });
+
   const integrations = [
     {
       id: 'figma',
@@ -113,6 +124,30 @@ const ServicesTab: React.FC = () => {
     }
   ];
 
+  const deployPlatforms = [
+    { id: 'vercel', name: 'Vercel', icon: 'i-ph:cloud-arrow-up', description: 'Next.js optimized deployment' },
+    { id: 'netlify', name: 'Netlify', icon: 'i-ph:cloud-arrow-up', description: 'Static site hosting' },
+    { id: 'github-pages', name: 'GitHub Pages', icon: 'i-ph:github-logo', description: 'Free static hosting' },
+    { id: 'firebase', name: 'Firebase Hosting', icon: 'i-ph:flame', description: 'Google hosting service' },
+    { id: 'aws-s3', name: 'AWS S3', icon: 'i-ph:cloud', description: 'Amazon cloud storage' },
+    { id: 'azure-static', name: 'Azure Static Web Apps', icon: 'i-ph:cloud', description: 'Microsoft hosting' }
+  ];
+
+  const exportFormats = [
+    { id: 'html', name: 'HTML', icon: 'i-ph:file-html', description: 'Static HTML files' },
+    { id: 'react', name: 'React', icon: 'i-ph:code', description: 'React components' },
+    { id: 'vue', name: 'Vue', icon: 'i-ph:code', description: 'Vue components' },
+    { id: 'angular', name: 'Angular', icon: 'i-ph:code', description: 'Angular components' },
+    { id: 'nextjs', name: 'Next.js', icon: 'i-ph:code', description: 'Next.js project' },
+    { id: 'nuxt', name: 'Nuxt.js', icon: 'i-ph:code', description: 'Nuxt.js project' }
+  ];
+
+  const handleDeploy = () => {
+    // Simulate deployment
+    console.log('Deploying to:', selectedPlatform, 'with settings:', deploySettings);
+    setShowDeployModal(false);
+  };
+
   return (
     <div className="space-y-3 sm:space-y-4 md:space-y-6">
       <div>
@@ -178,8 +213,11 @@ const ServicesTab: React.FC = () => {
       <div className="mt-4 sm:mt-6 p-3 sm:p-4 rounded-md sm:rounded-lg bg-gray-800 border border-gray-700">
         <h3 className="text-sm sm:text-base font-medium text-white mb-2 sm:mb-3">Quick Actions</h3>
         <div className="grid grid-cols-2 gap-2 sm:gap-3">
-          <button className="px-2 py-1.5 sm:px-3 sm:py-2 bg-purple-600 hover:bg-purple-700 text-white text-xs sm:text-sm rounded-md transition-colors">
-            Add Integration
+          <button 
+            onClick={() => setShowDeployModal(true)}
+            className="px-2 py-1.5 sm:px-3 sm:py-2 bg-purple-600 hover:bg-purple-700 text-white text-xs sm:text-sm rounded-md transition-colors"
+          >
+            Deploy & Export
           </button>
           <button className="px-2 py-1.5 sm:px-3 sm:py-2 bg-gray-700 hover:bg-gray-600 text-white text-xs sm:text-sm rounded-md transition-colors">
             View All
@@ -208,6 +246,157 @@ const ServicesTab: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Deploy & Export Modal */}
+      <RadixDialog.Root open={showDeployModal} onOpenChange={setShowDeployModal}>
+        <RadixDialog.Portal>
+          <RadixDialog.Overlay className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[200]" />
+          <RadixDialog.Content className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[95vw] max-w-[500px] h-[80vh] max-h-[600px] bg-gray-900 rounded-xl border border-gray-700 z-[201] overflow-hidden">
+            <div className="flex flex-col h-full">
+              {/* Header */}
+              <div className="flex items-center justify-between p-4 border-b border-gray-700">
+                <h2 className="text-lg font-semibold text-white">Deploy & Export</h2>
+                <button
+                  onClick={() => setShowDeployModal(false)}
+                  className="w-6 h-6 rounded-full bg-transparent hover:bg-gray-800 flex items-center justify-center"
+                >
+                  <div className="i-ph:x w-4 h-4 text-white" />
+                </button>
+              </div>
+
+              {/* Content */}
+              <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                {/* Deploy Section */}
+                <div>
+                  <h3 className="text-sm font-medium text-white mb-3">Deploy Platform</h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    {deployPlatforms.map((platform) => (
+                      <div
+                        key={platform.id}
+                        onClick={() => setSelectedPlatform(platform.id)}
+                        className={classNames(
+                          'p-3 rounded-lg border cursor-pointer transition-all',
+                          selectedPlatform === platform.id
+                            ? 'bg-purple-600 border-purple-500'
+                            : 'bg-gray-800 border-gray-700 hover:bg-gray-700'
+                        )}
+                      >
+                        <div className="flex items-center space-x-2">
+                          <div className="w-6 h-6 rounded bg-gray-700 flex items-center justify-center">
+                            <div className={classNames(platform.icon, 'w-3 h-3 text-white')} />
+                          </div>
+                          <div>
+                            <div className="text-xs font-medium text-white">{platform.name}</div>
+                            <div className="text-[10px] text-gray-400">{platform.description}</div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Deploy Settings */}
+                {selectedPlatform && (
+                  <div>
+                    <h3 className="text-sm font-medium text-white mb-3">Deploy Settings</h3>
+                    <div className="space-y-2">
+                      <label className="flex items-center space-x-2">
+                        <input
+                          type="checkbox"
+                          checked={deploySettings.autoDeploy}
+                          onChange={(e) => setDeploySettings({...deploySettings, autoDeploy: e.target.checked})}
+                          className="w-3 h-3 rounded bg-gray-700 border-gray-600"
+                        />
+                        <span className="text-xs text-white">Auto deploy on push</span>
+                      </label>
+                      <label className="flex items-center space-x-2">
+                        <input
+                          type="checkbox"
+                          checked={deploySettings.previewUrls}
+                          onChange={(e) => setDeploySettings({...deploySettings, previewUrls: e.target.checked})}
+                          className="w-3 h-3 rounded bg-gray-700 border-gray-600"
+                        />
+                        <span className="text-xs text-white">Generate preview URLs</span>
+                      </label>
+                      <label className="flex items-center space-x-2">
+                        <input
+                          type="checkbox"
+                          checked={deploySettings.analytics}
+                          onChange={(e) => setDeploySettings({...deploySettings, analytics: e.target.checked})}
+                          className="w-3 h-3 rounded bg-gray-700 border-gray-600"
+                        />
+                        <span className="text-xs text-white">Enable analytics</span>
+                      </label>
+                      <div>
+                        <label className="text-xs text-white block mb-1">Custom Domain</label>
+                        <input
+                          type="text"
+                          value={deploySettings.customDomain}
+                          onChange={(e) => setDeploySettings({...deploySettings, customDomain: e.target.value})}
+                          placeholder="yourdomain.com"
+                          className="w-full px-2 py-1 text-xs bg-gray-800 border border-gray-700 rounded text-white placeholder-gray-400"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-xs text-white block mb-1">Environment</label>
+                        <select
+                          value={deploySettings.environment}
+                          onChange={(e) => setDeploySettings({...deploySettings, environment: e.target.value})}
+                          className="w-full px-2 py-1 text-xs bg-gray-800 border border-gray-700 rounded text-white"
+                        >
+                          <option value="production">Production</option>
+                          <option value="staging">Staging</option>
+                          <option value="development">Development</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Export Section */}
+                <div>
+                  <h3 className="text-sm font-medium text-white mb-3">Export Format</h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    {exportFormats.map((format) => (
+                      <div
+                        key={format.id}
+                        className="p-3 rounded-lg border bg-gray-800 border-gray-700 hover:bg-gray-700 cursor-pointer transition-all"
+                      >
+                        <div className="flex items-center space-x-2">
+                          <div className="w-6 h-6 rounded bg-gray-700 flex items-center justify-center">
+                            <div className={classNames(format.icon, 'w-3 h-3 text-white')} />
+                          </div>
+                          <div>
+                            <div className="text-xs font-medium text-white">{format.name}</div>
+                            <div className="text-[10px] text-gray-400">{format.description}</div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Footer */}
+              <div className="p-4 border-t border-gray-700 flex justify-end space-x-2">
+                <button
+                  onClick={() => setShowDeployModal(false)}
+                  className="px-3 py-1.5 text-xs bg-gray-700 hover:bg-gray-600 text-white rounded-md transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleDeploy}
+                  disabled={!selectedPlatform}
+                  className="px-3 py-1.5 text-xs bg-purple-600 hover:bg-purple-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded-md transition-colors"
+                >
+                  Deploy & Export
+                </button>
+              </div>
+            </div>
+          </RadixDialog.Content>
+        </RadixDialog.Portal>
+      </RadixDialog.Root>
     </div>
   );
 };
