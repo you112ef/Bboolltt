@@ -26,52 +26,22 @@ interface SearchInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
  * A search input field with a search icon and optional clear button.
  */
 export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
-  (
-    { className, onClear, showClearButton = true, iconClassName, containerClassName, loading = false, ...props },
-    ref,
-  ) => {
-    const hasValue = Boolean(props.value);
-
+  ({ className, placeholder = 'Search...', ...props }, ref) => {
     return (
-      <div className={classNames('relative flex items-center w-full', containerClassName)}>
-        {/* Search icon or loading spinner */}
-        <div
-          className={classNames(
-            'absolute left-3 top-1/2 -translate-y-1/2 text-bolt-elements-textTertiary',
-            iconClassName,
-          )}
-        >
-          {loading ? (
-            <span className="i-ph:spinner-gap animate-spin w-4 h-4" />
-          ) : (
-            <span className="i-ph:magnifying-glass w-4 h-4" />
-          )}
+      <div className="relative">
+        <div className="absolute inset-y-0 left-0 pl-2 sm:pl-3 flex items-center pointer-events-none">
+          <div className="h-3 w-3 sm:h-4 sm:w-4 text-gray-400 i-ph:magnifying-glass" />
         </div>
-
-        {/* Input field */}
-        <Input
+        <input
           ref={ref}
-          className={classNames('pl-10', hasValue && showClearButton ? 'pr-10' : '', className)}
+          type="text"
+          className={classNames(
+            'block w-full pl-6 sm:pl-8 pr-3 py-1 sm:py-2 text-xs sm:text-sm border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-purple-500 focus:border-purple-500 sm:text-sm',
+            className,
+          )}
+          placeholder={placeholder}
           {...props}
         />
-
-        {/* Clear button */}
-        <AnimatePresence>
-          {hasValue && showClearButton && (
-            <motion.button
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
-              transition={{ duration: 0.15 }}
-              type="button"
-              onClick={onClear}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-bolt-elements-textTertiary hover:text-bolt-elements-textSecondary p-1 rounded-full hover:bg-bolt-elements-background-depth-2"
-              aria-label="Clear search"
-            >
-              <span className="i-ph:x w-3.5 h-3.5" />
-            </motion.button>
-          )}
-        </AnimatePresence>
       </div>
     );
   },
