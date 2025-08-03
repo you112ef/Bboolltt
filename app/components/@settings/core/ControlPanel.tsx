@@ -282,17 +282,17 @@ export const ControlPanel = ({ open, onClose }: ControlPanelProps) => {
                     {activeTab ? (
                       getTabComponent(activeTab)
                     ) : (
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 relative">
+                      <div className="grid grid-cols-2 gap-6 relative max-w-4xl mx-auto">
                         {visibleTabs.map((tab, index) => (
                           <div
                             key={tab.id}
                             className={classNames(
-                              'aspect-[1.5/1] transition-transform duration-100 ease-out',
-                              'hover:scale-[1.01]',
+                              'w-44 h-44 transition-all duration-200 ease-out',
+                              'hover:scale-[1.02] hover:shadow-lg',
                             )}
                             style={{
-                              animationDelay: `${index * 30}ms`,
-                              animation: open ? 'fadeInUp 200ms ease-out forwards' : 'none',
+                              animationDelay: `${index * 50}ms`,
+                              animation: open ? 'fadeInUp 300ms ease-out forwards' : 'none',
                             }}
                           >
                             <TabTile
