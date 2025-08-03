@@ -1,64 +1,128 @@
-import { forwardRef } from 'react';
+import React from 'react';
 import { classNames } from '~/utils/classNames';
 
-export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {}
+interface CardProps {
+  children: React.ReactNode;
+  className?: string;
+  size?: 'sm' | 'md' | 'lg';
+}
 
-export const Card = forwardRef<HTMLDivElement, CardProps>(
-  ({ className, ...props }, ref) => (
+export const Card: React.FC<CardProps> = ({ children, className = '', size = 'md' }) => {
+  const sizeClasses = {
+    sm: 'p-2 sm:p-3',
+    md: 'p-2 sm:p-3 md:p-4',
+    lg: 'p-3 sm:p-4 md:p-6',
+  };
+
+  return (
     <div
-      ref={ref}
-      className={classNames('rounded-lg border bg-card text-card-foreground shadow-sm p-2 sm:p-3 md:p-4', className)}
-      {...props}
-    />
-  ),
-);
+      className={classNames(
+        'rounded-lg border bg-card text-card-foreground shadow-sm',
+        sizeClasses[size],
+        className
+      )}
+    >
+      {children}
+    </div>
+  );
+};
 
-Card.displayName = 'Card';
+interface CardHeaderProps {
+  children: React.ReactNode;
+  className?: string;
+  size?: 'sm' | 'md' | 'lg';
+}
 
-export interface CardHeaderProps extends React.HTMLAttributes<HTMLDivElement> {}
+export const CardHeader: React.FC<CardHeaderProps> = ({ children, className = '', size = 'md' }) => {
+  const sizeClasses = {
+    sm: 'p-2 sm:p-3 space-y-1.5',
+    md: 'p-2 sm:p-3 md:p-4 space-y-1.5 sm:space-y-2',
+    lg: 'p-3 sm:p-4 md:p-6 space-y-2',
+  };
 
-export const CardHeader = forwardRef<HTMLDivElement, CardHeaderProps>(
-  ({ className, ...props }, ref) => (
-    <div ref={ref} className={classNames('flex flex-col space-y-1.5 sm:space-y-2 p-2 sm:p-3 md:p-4', className)} {...props} />
-  ),
-);
+  return (
+    <div className={classNames('flex flex-col space-y-1.5 sm:space-y-2', sizeClasses[size], className)}>
+      {children}
+    </div>
+  );
+};
 
-CardHeader.displayName = 'CardHeader';
+interface CardTitleProps {
+  children: React.ReactNode;
+  className?: string;
+  size?: 'sm' | 'md' | 'lg';
+}
 
-export interface CardTitleProps extends React.HTMLAttributes<HTMLHeadingElement> {}
+export const CardTitle: React.FC<CardTitleProps> = ({ children, className = '', size = 'md' }) => {
+  const sizeClasses = {
+    sm: 'text-sm',
+    md: 'text-sm sm:text-lg',
+    lg: 'text-base sm:text-xl',
+  };
 
-export const CardTitle = forwardRef<HTMLHeadingElement, CardTitleProps>(
-  ({ className, ...props }, ref) => (
-    <h3 ref={ref} className={classNames('text-sm sm:text-lg font-semibold leading-none tracking-tight', className)} {...props} />
-  ),
-);
+  return (
+    <h3 className={classNames('text-2xl font-semibold leading-none tracking-tight', sizeClasses[size], className)}>
+      {children}
+    </h3>
+  );
+};
 
-CardTitle.displayName = 'CardTitle';
+interface CardDescriptionProps {
+  children: React.ReactNode;
+  className?: string;
+  size?: 'sm' | 'md' | 'lg';
+}
 
-export interface CardDescriptionProps extends React.HTMLAttributes<HTMLParagraphElement> {}
+export const CardDescription: React.FC<CardDescriptionProps> = ({ children, className = '', size = 'md' }) => {
+  const sizeClasses = {
+    sm: 'text-xs',
+    md: 'text-xs sm:text-sm',
+    lg: 'text-sm',
+  };
 
-export const CardDescription = forwardRef<HTMLParagraphElement, CardDescriptionProps>(
-  ({ className, ...props }, ref) => (
-    <p ref={ref} className={classNames('text-xs sm:text-sm text-muted-foreground', className)} {...props} />
-  ),
-);
+  return (
+    <p className={classNames('text-sm text-muted-foreground', sizeClasses[size], className)}>
+      {children}
+    </p>
+  );
+};
 
-CardDescription.displayName = 'CardDescription';
+interface CardContentProps {
+  children: React.ReactNode;
+  className?: string;
+  size?: 'sm' | 'md' | 'lg';
+}
 
-export interface CardContentProps extends React.HTMLAttributes<HTMLDivElement> {}
+export const CardContent: React.FC<CardContentProps> = ({ children, className = '', size = 'md' }) => {
+  const sizeClasses = {
+    sm: 'p-2 sm:p-3 pt-0',
+    md: 'p-2 sm:p-3 md:p-4 pt-0',
+    lg: 'p-3 sm:p-4 md:p-6 pt-0',
+  };
 
-export const CardContent = forwardRef<HTMLDivElement, CardContentProps>(
-  ({ className, ...props }, ref) => <div ref={ref} className={classNames('p-2 sm:p-3 md:p-4 pt-0', className)} {...props} />,
-);
+  return (
+    <div className={classNames(sizeClasses[size], className)}>
+      {children}
+    </div>
+  );
+};
 
-CardContent.displayName = 'CardContent';
+interface CardFooterProps {
+  children: React.ReactNode;
+  className?: string;
+  size?: 'sm' | 'md' | 'lg';
+}
 
-export interface CardFooterProps extends React.HTMLAttributes<HTMLDivElement> {}
+export const CardFooter: React.FC<CardFooterProps> = ({ children, className = '', size = 'md' }) => {
+  const sizeClasses = {
+    sm: 'p-2 sm:p-3 pt-0',
+    md: 'p-2 sm:p-3 md:p-4 pt-0',
+    lg: 'p-3 sm:p-4 md:p-6 pt-0',
+  };
 
-export const CardFooter = forwardRef<HTMLDivElement, CardFooterProps>(
-  ({ className, ...props }, ref) => (
-    <div ref={ref} className={classNames('flex items-center p-2 sm:p-3 md:p-4 pt-0', className)} {...props} />
-  ),
-);
-
-CardFooter.displayName = 'CardFooter';
+  return (
+    <div className={classNames('flex items-center', sizeClasses[size], className)}>
+      {children}
+    </div>
+  );
+};
