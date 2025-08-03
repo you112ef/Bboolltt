@@ -12,7 +12,6 @@ import type { TabType, Profile } from './types';
 import { TAB_LABELS, DEFAULT_TAB_CONFIG, TAB_DESCRIPTIONS } from './constants';
 import { DialogTitle } from '~/components/ui/Dialog';
 import { AvatarDropdown } from './AvatarDropdown';
-import BackgroundRays from '~/components/ui/BackgroundRays';
 
 // Import all tab components
 import ProfileTab from '~/components/@settings/tabs/profile/ProfileTab';
@@ -33,11 +32,11 @@ interface ControlPanelProps {
 }
 
 // Beta status for experimental features
-const BETA_TABS = new Set<TabType>(['service-status', 'local-providers', 'mcp']);
+const BETA_TABS = new Set<TabType>(['local-providers', 'service-status']);
 
 const BetaLabel = () => (
-  <div className="absolute top-2 right-2 px-1.5 py-0.5 rounded-full bg-purple-500/10 dark:bg-purple-500/20">
-    <span className="text-[10px] font-medium text-purple-600 dark:text-purple-400">BETA</span>
+  <div className="absolute top-2 right-2 px-1.5 py-0.5 rounded-full bg-purple-500/20">
+    <span className="text-[10px] font-medium text-purple-400">BETA</span>
   </div>
 );
 
@@ -203,7 +202,7 @@ export const ControlPanel = ({ open, onClose }: ControlPanelProps) => {
     <RadixDialog.Root open={open}>
       <RadixDialog.Portal>
         <div className="fixed inset-0 flex items-center justify-center z-[100] modern-scrollbar">
-          <RadixDialog.Overlay className="absolute inset-0 bg-black/70 dark:bg-black/80 backdrop-blur-sm transition-opacity duration-200" />
+          <RadixDialog.Overlay className="absolute inset-0 bg-black/95 backdrop-blur-sm transition-opacity duration-200" />
 
           <RadixDialog.Content
             aria-describedby={undefined}
@@ -213,48 +212,43 @@ export const ControlPanel = ({ open, onClose }: ControlPanelProps) => {
           >
             <div
               className={classNames(
-                'w-[1200px] h-[90vh]',
-                'bg-bolt-elements-background-depth-1',
+                'w-[400px] h-[600px]',
+                'bg-black',
                 'rounded-2xl shadow-2xl',
-                'border border-bolt-elements-borderColor',
+                'border border-gray-800',
                 'flex flex-col overflow-hidden',
                 'relative',
                 'transform transition-all duration-200 ease-out',
                 open ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 translate-y-4',
               )}
             >
-              <div className="absolute inset-0 overflow-hidden rounded-2xl">
-                <BackgroundRays />
-              </div>
               <div className="relative z-10 flex flex-col h-full">
                 {/* Header */}
-                <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                <div className="flex items-center justify-between px-6 py-4 border-b border-gray-800">
                   <div className="flex items-center space-x-4">
                     {(activeTab || showTabManagement) && (
                       <button
                         onClick={handleBack}
-                        className="flex items-center justify-center w-8 h-8 rounded-full bg-transparent hover:bg-purple-500/10 dark:hover:bg-purple-500/20 group transition-colors duration-150"
+                        className="flex items-center justify-center w-8 h-8 rounded-full bg-transparent hover:bg-gray-800 group transition-colors duration-150"
                       >
-                        <div className="i-ph:arrow-left w-4 h-4 text-gray-500 dark:text-gray-400 group-hover:text-purple-500 transition-colors" />
+                        <div className="i-ph:arrow-left w-4 h-4 text-gray-400 group-hover:text-white transition-colors" />
                       </button>
                     )}
-                    <DialogTitle className="text-xl font-semibold text-gray-900 dark:text-white">
+                    <DialogTitle className="text-xl font-semibold text-white">
                       {showTabManagement ? 'Tab Management' : activeTab ? TAB_LABELS[activeTab] : 'Control Panel'}
                     </DialogTitle>
                   </div>
 
-                  <div className="flex items-center gap-6">
-                    {/* Avatar and Dropdown */}
-                    <div className="pl-6">
-                      <AvatarDropdown onSelectTab={handleTabClick} />
-                    </div>
-
-                    {/* Close Button */}
+                  <div className="flex items-center gap-4">
+                    {/* Code and Close Icons */}
+                    <button className="flex items-center justify-center w-8 h-8 rounded-full bg-transparent hover:bg-gray-800 group transition-colors duration-150">
+                      <div className="i-ph:code w-4 h-4 text-white group-hover:text-gray-300 transition-colors" />
+                    </button>
                     <button
                       onClick={handleClose}
-                      className="flex items-center justify-center w-8 h-8 rounded-full bg-transparent hover:bg-purple-500/10 dark:hover:bg-purple-500/20 group transition-all duration-200"
+                      className="flex items-center justify-center w-8 h-8 rounded-full bg-transparent hover:bg-gray-800 group transition-all duration-200"
                     >
-                      <div className="i-ph:x w-4 h-4 text-gray-500 dark:text-gray-400 group-hover:text-purple-500 transition-colors" />
+                      <div className="i-ph:x w-4 h-4 text-white group-hover:text-gray-300 transition-colors" />
                     </button>
                   </div>
                 </div>
@@ -267,8 +261,7 @@ export const ControlPanel = ({ open, onClose }: ControlPanelProps) => {
                     'hover:overflow-y-auto',
                     'scrollbar scrollbar-w-2',
                     'scrollbar-track-transparent',
-                    'scrollbar-thumb-[#E5E5E5] hover:scrollbar-thumb-[#CCCCCC]',
-                    'dark:scrollbar-thumb-[#333333] dark:hover:scrollbar-thumb-[#444444]',
+                    'scrollbar-thumb-gray-700 hover:scrollbar-thumb-gray-600',
                     'will-change-scroll',
                     'touch-auto',
                   )}
@@ -282,17 +275,17 @@ export const ControlPanel = ({ open, onClose }: ControlPanelProps) => {
                     {activeTab ? (
                       getTabComponent(activeTab)
                     ) : (
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 relative">
+                      <div className="grid grid-cols-2 gap-4">
                         {visibleTabs.map((tab, index) => (
                           <div
                             key={tab.id}
                             className={classNames(
-                              'aspect-[1.5/1] transition-transform duration-100 ease-out',
-                              'hover:scale-[1.01]',
+                              'w-[160px] h-[160px] transition-all duration-200 ease-out',
+                              'hover:scale-[1.02]',
                             )}
                             style={{
-                              animationDelay: `${index * 30}ms`,
-                              animation: open ? 'fadeInUp 200ms ease-out forwards' : 'none',
+                              animationDelay: `${index * 50}ms`,
+                              animation: open ? 'fadeInUp 300ms ease-out forwards' : 'none',
                             }}
                           >
                             <TabTile

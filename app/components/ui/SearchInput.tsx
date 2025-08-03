@@ -1,80 +1,54 @@
-import React, { forwardRef } from 'react';
+import React from 'react';
 import { classNames } from '~/utils/classNames';
-import { Input } from './Input';
-import { motion, AnimatePresence } from 'framer-motion';
 
-interface SearchInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  /** Function to call when the clear button is clicked */
-  onClear?: () => void;
-
-  /** Whether to show the clear button when there is input */
-  showClearButton?: boolean;
-
-  /** Additional class name for the search icon */
-  iconClassName?: string;
-
-  /** Additional class name for the container */
-  containerClassName?: string;
-
-  /** Whether the search is loading */
-  loading?: boolean;
+interface SearchInputProps {
+  value?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  placeholder?: string;
+  disabled?: boolean;
+  className?: string;
+  size?: 'sm' | 'md' | 'lg';
 }
 
-/**
- * SearchInput component
- *
- * A search input field with a search icon and optional clear button.
- */
-export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
-  (
-    { className, onClear, showClearButton = true, iconClassName, containerClassName, loading = false, ...props },
-    ref,
-  ) => {
-    const hasValue = Boolean(props.value);
+export const SearchInput: React.FC<SearchInputProps> = ({
+  value,
+  onChange,
+  placeholder = 'Search...',
+  disabled = false,
+  className = '',
+  size = 'md',
+}) => {
+  const baseClasses = 'flex w-full rounded-md border border-input bg-background text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50';
+  
+  const sizeClasses = {
+    sm: 'h-6 pl-6 pr-3 py-1 text-xs',
+    md: 'h-8 pl-8 pr-3 py-2 text-sm',
+    lg: 'h-10 pl-10 pr-4 py-2 text-base',
+  };
 
-    return (
-      <div className={classNames('relative flex items-center w-full', containerClassName)}>
-        {/* Search icon or loading spinner */}
-        <div
-          className={classNames(
-            'absolute left-3 top-1/2 -translate-y-1/2 text-bolt-elements-textTertiary',
-            iconClassName,
-          )}
-        >
-          {loading ? (
-            <span className="i-ph:spinner-gap animate-spin w-4 h-4" />
-          ) : (
-            <span className="i-ph:magnifying-glass w-4 h-4" />
-          )}
-        </div>
+  const iconSizeClasses = {
+    sm: 'h-3 w-3',
+    md: 'h-4 w-4',
+    lg: 'h-5 w-5',
+  };
 
-        {/* Input field */}
-        <Input
-          ref={ref}
-          className={classNames('pl-10', hasValue && showClearButton ? 'pr-10' : '', className)}
-          {...props}
-        />
-
-        {/* Clear button */}
-        <AnimatePresence>
-          {hasValue && showClearButton && (
-            <motion.button
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
-              transition={{ duration: 0.15 }}
-              type="button"
-              onClick={onClear}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-bolt-elements-textTertiary hover:text-bolt-elements-textSecondary p-1 rounded-full hover:bg-bolt-elements-background-depth-2"
-              aria-label="Clear search"
-            >
-              <span className="i-ph:x w-3.5 h-3.5" />
-            </motion.button>
-          )}
-        </AnimatePresence>
+  return (
+    <div className="relative">
+      <div className="absolute left-3 top-1/2 -translate-y-1/2">
+        <div className={classNames('i-ph:magnifying-glass text-muted-foreground', iconSizeClasses[size])} />
       </div>
-    );
-  },
-);
-
-SearchInput.displayName = 'SearchInput';
+      <input
+        type="search"
+        value={value}
+        onChange={onChange}
+        placeholder={placeholder}
+        disabled={disabled}
+        className={classNames(
+          baseClasses,
+          sizeClasses[size],
+          className
+        )}
+      />
+    </div>
+  );
+};

@@ -1,42 +1,41 @@
 import { useStore } from '@nanostores/react';
-import { ClientOnly } from 'remix-utils/client-only';
-import { chatStore } from '~/lib/stores/chat';
-import { classNames } from '~/utils/classNames';
+import { workbenchStore } from '~/lib/stores/workbench';
+import { streamingState } from '~/lib/stores/streaming';
 import { HeaderActionButtons } from './HeaderActionButtons.client';
-import { ChatDescription } from '~/lib/persistence/ChatDescription.client';
+import { classNames } from '~/utils/classNames';
+import { useChatHistory } from '~/lib/persistence';
+import { useState } from 'react';
 
-export function Header() {
-  const chat = useStore(chatStore);
+interface HeaderProps {
+  chatStarted: boolean;
+}
+
+export function Header({ chatStarted }: HeaderProps) {
+  const [activePreviewIndex] = useState(0);
+  const previews = useStore(workbenchStore.previews);
+  const activePreview = previews[activePreviewIndex];
+  const isStreaming = useStore(streamingState);
+  const { exportChat } = useChatHistory();
 
   return (
-    <header
-      className={classNames('flex items-center px-4 border-b h-[var(--header-height)]', {
-        'border-transparent': !chat.started,
-        'border-bolt-elements-borderColor': chat.started,
-      })}
-    >
-      <div className="flex items-center gap-2 z-logo text-bolt-elements-textPrimary cursor-pointer">
-        <div className="i-ph:sidebar-simple-duotone text-xl" />
-        <a href="/" className="text-2xl font-semibold text-accent flex items-center">
-          {/* <span className="i-bolt:logo-text?mask w-[46px] inline-block" /> */}
-          <img src="/logo-light-styled.png" alt="logo" className="w-[90px] inline-block dark:hidden" />
-          <img src="/logo-dark-styled.png" alt="logo" className="w-[90px] inline-block hidden dark:block" />
-        </a>
+    <header className="flex items-center justify-between px-2 sm:px-3 md:px-4 py-2 sm:py-3 md:py-4 bg-bolt-elements-background-depth-1 border-b border-bolt-elements-borderColor">
+      <div className="flex items-center gap-1 sm:gap-2">
+        <div className="flex items-center gap-1 sm:gap-2">
+          <div className="i-bolt:bolt text-sm sm:text-base md:text-xl text-bolt-elements-textPrimary"></div>
+          <span className="text-lg sm:text-xl md:text-2xl font-bold text-bolt-elements-textPrimary">Bolt</span>
+        </div>
+        <div className="flex items-center gap-1 sm:gap-2">
+          <img
+            src="/bolt-logo.png"
+            alt="Bolt Logo"
+            className="w-[60px] sm:w-[75px] md:w-[90px] h-auto"
+          />
+        </div>
+        <div className="text-xs sm:text-sm md:text-base text-bolt-elements-textSecondary">
+          AI-powered development platform
+        </div>
       </div>
-      {chat.started && ( // Display ChatDescription and HeaderActionButtons only when the chat has started.
-        <>
-          <span className="flex-1 px-4 truncate text-center text-bolt-elements-textPrimary">
-            <ClientOnly>{() => <ChatDescription />}</ClientOnly>
-          </span>
-          <ClientOnly>
-            {() => (
-              <div className="">
-                <HeaderActionButtons chatStarted={chat.started} />
-              </div>
-            )}
-          </ClientOnly>
-        </>
-      )}
+      <HeaderActionButtons chatStarted={chatStarted} />
     </header>
   );
 }

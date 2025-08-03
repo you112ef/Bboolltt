@@ -9,6 +9,10 @@ export function themeIsDark() {
   return themeStore.get() === 'dark';
 }
 
+export function themeIsLight() {
+  return themeStore.get() === 'light';
+}
+
 export const DEFAULT_THEME = 'light';
 
 export const themeStore = atom<Theme>(initStore());
@@ -24,9 +28,10 @@ function initStore() {
   return DEFAULT_THEME;
 }
 
-export function toggleTheme() {
+export function setTheme(newTheme: Theme) {
   const currentTheme = themeStore.get();
-  const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+  
+  if (currentTheme === newTheme) return;
 
   // Update the theme store
   themeStore.set(newTheme);
@@ -51,4 +56,50 @@ export function toggleTheme() {
   }
 
   logStore.logSystem(`Theme changed to ${newTheme} mode`);
+}
+
+export function toggleTheme() {
+  const currentTheme = themeStore.get();
+  const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+  
+  setTheme(newTheme);
+}
+
+export function setDarkTheme() {
+  setTheme('dark');
+}
+
+export function setLightTheme() {
+  setTheme('light');
+}
+
+// Auto-detect system theme preference
+export function detectSystemTheme(): Theme {
+  if (!import.meta.env.SSR && window.matchMedia) {
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+  return DEFAULT_THEME;
+}
+
+// Listen for system theme changes
+export function setupSystemThemeListener() {
+  if (!import.meta.env.SSR && window.matchMedia) {
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    
+    const handleChange = (e: MediaQueryListEvent) => {
+      const systemTheme = e.matches ? 'dark' : 'light';
+      const currentTheme = themeStore.get();
+      
+      // Only auto-switch if user hasn't manually set a theme
+      const hasManualTheme = localStorage.getItem(kTheme);
+      if (!hasManualTheme) {
+        setTheme(systemTheme);
+      }
+    };
+
+    mediaQuery.addEventListener('change', handleChange);
+    
+    // Cleanup function
+    return () => mediaQuery.removeEventListener('change', handleChange);
+  }
 }

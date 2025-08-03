@@ -115,7 +115,7 @@ export function McpTools() {
 
               <div className="flex justify-end gap-2 mt-6">
                 <div className="flex gap-2">
-                  <DialogClose asChild>
+                  <DialogClose onClick={() => setIsDialogOpen(false)}>
                     <DialogButton type="secondary">Close</DialogButton>
                   </DialogClose>
                 </div>

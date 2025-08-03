@@ -1,84 +1,52 @@
-import { memo, forwardRef, type ForwardedRef } from 'react';
+import React from 'react';
 import { classNames } from '~/utils/classNames';
 
-type IconSize = 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
-
-interface BaseIconButtonProps {
-  size?: IconSize;
-  className?: string;
-  iconClassName?: string;
-  disabledClassName?: string;
-  title?: string;
+interface IconButtonProps {
+  children: React.ReactNode;
+  onClick?: () => void;
   disabled?: boolean;
-  onClick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+  className?: string;
+  variant?: 'default' | 'ghost' | 'outline';
+  size?: 'sm' | 'md' | 'lg';
+  title?: string;
 }
 
-type IconButtonWithoutChildrenProps = {
-  icon: string;
-  children?: undefined;
-} & BaseIconButtonProps;
+export const IconButton: React.FC<IconButtonProps> = ({
+  children,
+  onClick,
+  disabled = false,
+  className = '',
+  variant = 'default',
+  size = 'md',
+  title,
+}) => {
+  const baseClasses = 'inline-flex items-center justify-center rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none';
+  
+  const variantClasses = {
+    default: 'bg-primary text-primary-foreground hover:bg-primary/90',
+    ghost: 'hover:bg-accent hover:text-accent-foreground',
+    outline: 'border border-input bg-background hover:bg-accent hover:text-accent-foreground',
+  };
+  
+  const sizeClasses = {
+    sm: 'h-6 w-6',
+    md: 'h-8 w-8',
+    lg: 'h-10 w-10',
+  };
 
-type IconButtonWithChildrenProps = {
-  icon?: undefined;
-  children: string | JSX.Element | JSX.Element[];
-} & BaseIconButtonProps;
-
-type IconButtonProps = IconButtonWithoutChildrenProps | IconButtonWithChildrenProps;
-
-// Componente IconButton com suporte a refs
-export const IconButton = memo(
-  forwardRef(
-    (
-      {
-        icon,
-        size = 'xl',
-        className,
-        iconClassName,
-        disabledClassName,
-        disabled = false,
-        title,
-        onClick,
-        children,
-      }: IconButtonProps,
-      ref: ForwardedRef<HTMLButtonElement>,
-    ) => {
-      return (
-        <button
-          ref={ref}
-          className={classNames(
-            'flex items-center text-bolt-elements-item-contentDefault bg-transparent enabled:hover:text-bolt-elements-item-contentActive rounded-md p-1 enabled:hover:bg-bolt-elements-item-backgroundActive disabled:cursor-not-allowed focus:outline-none',
-            {
-              [classNames('opacity-30', disabledClassName)]: disabled,
-            },
-            className,
-          )}
-          title={title}
-          disabled={disabled}
-          onClick={(event) => {
-            if (disabled) {
-              return;
-            }
-
-            onClick?.(event);
-          }}
-        >
-          {children ? children : <div className={classNames(icon, getIconSize(size), iconClassName)}></div>}
-        </button>
-      );
-    },
-  ),
-);
-
-function getIconSize(size: IconSize) {
-  if (size === 'sm') {
-    return 'text-sm';
-  } else if (size === 'md') {
-    return 'text-md';
-  } else if (size === 'lg') {
-    return 'text-lg';
-  } else if (size === 'xl') {
-    return 'text-xl';
-  } else {
-    return 'text-2xl';
-  }
-}
+  return (
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      title={title}
+      className={classNames(
+        baseClasses,
+        variantClasses[variant],
+        sizeClasses[size],
+        className
+      )}
+    >
+      {children}
+    </button>
+  );
+};

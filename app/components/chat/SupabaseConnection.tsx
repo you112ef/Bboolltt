@@ -144,7 +144,7 @@ export function SupabaseConnection() {
                 </div>
 
                 <div className="flex justify-end gap-2 mt-6">
-                  <DialogClose asChild>
+                  <DialogClose onClick={() => setIsDialogOpen(false)}>
                     <DialogButton type="secondary">Cancel</DialogButton>
                   </DialogClose>
                   <button
@@ -292,7 +292,7 @@ export function SupabaseConnection() {
                 )}
 
                 <div className="flex justify-end gap-2 mt-6">
-                  <DialogClose asChild>
+                  <DialogClose onClick={() => setIsDialogOpen(false)}>
                     <DialogButton type="secondary">Close</DialogButton>
                   </DialogClose>
                   <DialogButton type="danger" onClick={handleDisconnect}>

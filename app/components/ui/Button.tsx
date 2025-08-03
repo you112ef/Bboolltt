@@ -1,46 +1,53 @@
-import * as React from 'react';
-import { cva, type VariantProps } from 'class-variance-authority';
+import React from 'react';
 import { classNames } from '~/utils/classNames';
 
-const buttonVariants = cva(
-  'inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-bolt-elements-borderColor disabled:pointer-events-none disabled:opacity-50',
-  {
-    variants: {
-      variant: {
-        default: 'bg-bolt-elements-background text-bolt-elements-textPrimary hover:bg-bolt-elements-background-depth-2',
-        destructive: 'bg-red-500 text-white hover:bg-red-600',
-        outline:
-          'border border-bolt-elements-borderColor bg-transparent hover:bg-bolt-elements-background-depth-2 hover:text-bolt-elements-textPrimary text-bolt-elements-textPrimary dark:border-bolt-elements-borderColorActive',
-        secondary:
-          'bg-bolt-elements-background-depth-1 text-bolt-elements-textPrimary hover:bg-bolt-elements-background-depth-2',
-        ghost: 'hover:bg-bolt-elements-background-depth-1 hover:text-bolt-elements-textPrimary',
-        link: 'text-bolt-elements-textPrimary underline-offset-4 hover:underline',
-      },
-      size: {
-        default: 'h-10 px-4 py-2',
-        sm: 'h-9 px-3',
-        lg: 'h-11 px-8',
-        icon: 'h-10 w-10',
-      },
-    },
-    defaultVariants: {
-      variant: 'default',
-      size: 'default',
-    },
-  },
-);
-
-export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
-  _asChild?: boolean;
+interface ButtonProps {
+  children: React.ReactNode;
+  onClick?: () => void;
+  disabled?: boolean;
+  className?: string;
+  variant?: 'primary' | 'secondary' | 'ghost' | 'destructive';
+  size?: 'sm' | 'md' | 'lg';
+  type?: 'button' | 'submit' | 'reset';
 }
 
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, _asChild = false, ...props }, ref) => {
-    return <button className={classNames(buttonVariants({ variant, size }), className)} ref={ref} {...props} />;
-  },
-);
-Button.displayName = 'Button';
+export const Button: React.FC<ButtonProps> = ({
+  children,
+  onClick,
+  disabled = false,
+  className = '',
+  variant = 'primary',
+  size = 'md',
+  type = 'button',
+}) => {
+  const baseClasses = 'inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none';
+  
+  const variantClasses = {
+    primary: 'bg-primary text-primary-foreground hover:bg-primary/90',
+    secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
+    ghost: 'hover:bg-accent hover:text-accent-foreground',
+    destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/90',
+  };
+  
+  const sizeClasses = {
+    sm: 'h-6 px-2 text-xs',
+    md: 'h-8 px-3 text-sm',
+    lg: 'h-10 px-4 text-base',
+  };
 
-export { Button, buttonVariants };
+  return (
+    <button
+      type={type}
+      onClick={onClick}
+      disabled={disabled}
+      className={classNames(
+        baseClasses,
+        variantClasses[variant],
+        sizeClasses[size],
+        className
+      )}
+    >
+      {children}
+    </button>
+  );
+};
