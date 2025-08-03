@@ -14,7 +14,8 @@ export type TabType =
   | 'connection'
   | 'event-logs'
   | 'mcp'
-  | 'task-manager';
+  | 'task-manager'
+  | 'services';
 
 export type WindowType = 'user' | 'developer';
 
@@ -76,6 +77,7 @@ export const TAB_LABELS: Record<TabType, string> = {
   'event-logs': 'Event Logs',
   mcp: 'MCP Servers',
   'task-manager': 'Task Manager',
+  services: 'Services',
 };
 
 export const categoryLabels: Record<SettingCategory, string> = {

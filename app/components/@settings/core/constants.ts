@@ -13,6 +13,7 @@ export const TAB_ICONS: Record<TabType, string> = {
   'event-logs': 'i-ph:list-bullets',
   mcp: 'i-ph:wrench',
   'task-manager': 'i-ph:list-checks',
+  services: 'i-ph:cube',
 };
 
 export const TAB_LABELS: Record<TabType, string> = {
@@ -28,6 +29,7 @@ export const TAB_LABELS: Record<TabType, string> = {
   'event-logs': 'Event Logs',
   mcp: 'MCP Servers',
   'task-manager': 'Task Manager',
+  services: 'Services',
 };
 
 export const TAB_DESCRIPTIONS: Record<TabType, string> = {
@@ -43,22 +45,22 @@ export const TAB_DESCRIPTIONS: Record<TabType, string> = {
   'event-logs': 'View system events and logs',
   mcp: 'Configure MCP (Model Context Protocol) servers',
   'task-manager': 'Manage running tasks and processes',
+  services: 'Manage all integrations and external services',
 };
 
 export const DEFAULT_TAB_CONFIG = [
   // User Window Tabs (Always visible by default)
   { id: 'features', visible: true, window: 'user' as const, order: 0 },
   { id: 'data', visible: true, window: 'user' as const, order: 1 },
-  { id: 'cloud-providers', visible: true, window: 'user' as const, order: 2 },
-  { id: 'local-providers', visible: true, window: 'user' as const, order: 3 },
-  { id: 'connection', visible: true, window: 'user' as const, order: 4 },
-  { id: 'notifications', visible: true, window: 'user' as const, order: 5 },
-  { id: 'event-logs', visible: true, window: 'user' as const, order: 6 },
-  { id: 'profile', visible: true, window: 'user' as const, order: 7 },
-  { id: 'settings', visible: true, window: 'user' as const, order: 8 },
-  { id: 'mcp', visible: true, window: 'user' as const, order: 9 },
-  { id: 'service-status', visible: true, window: 'user' as const, order: 10 },
-  { id: 'task-manager', visible: true, window: 'user' as const, order: 11 },
+  { id: 'services', visible: true, window: 'user' as const, order: 2 },
+  { id: 'connection', visible: true, window: 'user' as const, order: 3 },
+  { id: 'notifications', visible: true, window: 'user' as const, order: 4 },
+  { id: 'event-logs', visible: true, window: 'user' as const, order: 5 },
+  { id: 'profile', visible: true, window: 'user' as const, order: 6 },
+  { id: 'settings', visible: true, window: 'user' as const, order: 7 },
+  { id: 'mcp', visible: true, window: 'user' as const, order: 8 },
+  { id: 'service-status', visible: true, window: 'user' as const, order: 9 },
+  { id: 'task-manager', visible: true, window: 'user' as const, order: 10 },
 
   // User Window Tabs (In dropdown, initially hidden)
 ];
