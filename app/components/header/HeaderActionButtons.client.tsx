@@ -5,6 +5,7 @@ import { streamingState } from '~/lib/stores/streaming';
 import { ExportChatButton } from '~/components/chat/chatExportAndImport/ExportChatButton';
 import { useChatHistory } from '~/lib/persistence';
 import { DeployButton } from '~/components/deploy/DeployButton';
+import { ThemeSwitch } from '~/components/ui/ThemeSwitch';
 
 interface HeaderActionButtonsProps {
   chatStarted: boolean;
@@ -20,7 +21,15 @@ export function HeaderActionButtons({ chatStarted }: HeaderActionButtonsProps) {
   const shouldShowButtons = !isStreaming && activePreview;
 
   return (
-    <div className="flex items-center">
+    <div className="flex items-center gap-2">
+      {/* Theme Switch */}
+      <ThemeSwitch 
+        size="sm" 
+        variant="simple" 
+        className="mr-2"
+      />
+      
+      {/* Existing Buttons */}
       {chatStarted && shouldShowButtons && <ExportChatButton exportChat={exportChat} />}
       {shouldShowButtons && <DeployButton />}
     </div>
