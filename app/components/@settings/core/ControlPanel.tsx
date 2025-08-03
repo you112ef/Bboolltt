@@ -212,43 +212,44 @@ export const ControlPanel = ({ open, onClose }: ControlPanelProps) => {
           >
             <div
               className={classNames(
-                'w-[500px] h-[700px]',
+                'w-[90vw] max-w-[400px] h-[80vh] max-h-[600px]',
                 'bg-black',
                 'rounded-2xl shadow-2xl',
                 'border border-gray-800',
                 'flex flex-col overflow-hidden',
                 'relative',
                 'transform transition-all duration-200 ease-out',
+                'control-panel-modal',
                 open ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 translate-y-4',
               )}
             >
               <div className="relative z-10 flex flex-col h-full">
                 {/* Header */}
-                <div className="flex items-center justify-between px-6 py-4 border-b border-gray-800">
-                  <div className="flex items-center space-x-4">
+                <div className="flex items-center justify-between px-4 py-3 border-b border-gray-800">
+                  <div className="flex items-center space-x-3">
                     {(activeTab || showTabManagement) && (
                       <button
                         onClick={handleBack}
-                        className="flex items-center justify-center w-8 h-8 rounded-full bg-transparent hover:bg-gray-800 group transition-colors duration-150"
+                        className="flex items-center justify-center w-7 h-7 rounded-full bg-transparent hover:bg-gray-800 group transition-colors duration-150"
                       >
-                        <div className="i-ph:arrow-left w-4 h-4 text-gray-400 group-hover:text-white transition-colors" />
+                        <div className="i-ph:arrow-left w-3.5 h-3.5 text-gray-400 group-hover:text-white transition-colors" />
                       </button>
                     )}
-                    <DialogTitle className="text-xl font-semibold text-white">
+                    <DialogTitle className="text-lg font-semibold text-white">
                       {showTabManagement ? 'Tab Management' : activeTab ? TAB_LABELS[activeTab] : 'Control Panel'}
                     </DialogTitle>
                   </div>
 
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-3">
                     {/* Code and Close Icons */}
-                    <button className="flex items-center justify-center w-8 h-8 rounded-full bg-transparent hover:bg-gray-800 group transition-colors duration-150">
-                      <div className="i-ph:code w-4 h-4 text-white group-hover:text-gray-300 transition-colors" />
+                    <button className="flex items-center justify-center w-7 h-7 rounded-full bg-transparent hover:bg-gray-800 group transition-colors duration-150">
+                      <div className="i-ph:code w-3.5 h-3.5 text-white group-hover:text-gray-300 transition-colors" />
                     </button>
                     <button
                       onClick={handleClose}
-                      className="flex items-center justify-center w-8 h-8 rounded-full bg-transparent hover:bg-gray-800 group transition-all duration-200"
+                      className="flex items-center justify-center w-7 h-7 rounded-full bg-transparent hover:bg-gray-800 group transition-all duration-200"
                     >
-                      <div className="i-ph:x w-4 h-4 text-white group-hover:text-gray-300 transition-colors" />
+                      <div className="i-ph:x w-3.5 h-3.5 text-white group-hover:text-gray-300 transition-colors" />
                     </button>
                   </div>
                 </div>
@@ -268,20 +269,21 @@ export const ControlPanel = ({ open, onClose }: ControlPanelProps) => {
                 >
                   <div
                     className={classNames(
-                      'p-6 transition-opacity duration-150',
+                      'p-4 transition-opacity duration-150',
                       activeTab || showTabManagement ? 'opacity-100' : 'opacity-100',
                     )}
                   >
                     {activeTab ? (
                       getTabComponent(activeTab)
                     ) : (
-                      <div className="grid grid-cols-2 gap-6 max-w-md mx-auto">
+                      <div className="grid grid-cols-2 gap-3 max-w-sm mx-auto control-panel-grid">
                         {visibleTabs.map((tab, index) => (
                           <div
                             key={tab.id}
                             className={classNames(
-                              'w-[180px] h-[180px] transition-all duration-200 ease-out',
+                              'w-[140px] h-[140px] transition-all duration-200 ease-out',
                               'hover:scale-[1.02]',
+                              'control-panel-card',
                             )}
                             style={{
                               animationDelay: `${index * 50}ms`,

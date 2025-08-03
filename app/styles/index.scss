@@ -71,3 +71,76 @@ body {
   // Firefox support for inverted colors
   scrollbar-color: color-mix(in srgb, var(--bolt-elements-textPrimary), transparent 50%) transparent;
 }
+
+/* Responsive Control Panel */
+@media (max-width: 640px) {
+  .control-panel-modal {
+    width: 95vw !important;
+    height: 90vh !important;
+    max-width: none !important;
+    max-height: none !important;
+  }
+  
+  .control-panel-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 0.75rem !important;
+  }
+  
+  .control-panel-card {
+    width: 120px !important;
+    height: 120px !important;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .control-panel-modal {
+    width: 80vw !important;
+    max-width: 500px !important;
+    height: 85vh !important;
+    max-height: 700px !important;
+  }
+  
+  .control-panel-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 1rem !important;
+  }
+  
+  .control-panel-card {
+    width: 140px !important;
+    height: 140px !important;
+  }
+}
+
+@media (min-width: 1025px) {
+  .control-panel-modal {
+    width: 70vw !important;
+    max-width: 600px !important;
+    height: 80vh !important;
+    max-height: 800px !important;
+  }
+  
+  .control-panel-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 1.5rem !important;
+  }
+  
+  .control-panel-card {
+    width: 160px !important;
+    height: 160px !important;
+  }
+}
+
+/* Dark theme adjustments */
+.dark .control-panel-modal {
+  background-color: #000000 !important;
+  border-color: #374151 !important;
+}
+
+.dark .control-panel-card {
+  background-color: #1f2937 !important;
+  border-color: #374151 !important;
+}
+
+.dark .control-panel-card:hover {
+  background-color: #374151 !important;
+}
