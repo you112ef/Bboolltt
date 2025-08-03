@@ -125,21 +125,28 @@ const ServicesTab: React.FC = () => {
   ];
 
   const deployPlatforms = [
-    { id: 'vercel', name: 'Vercel', icon: 'i-ph:cloud-arrow-up', description: 'Next.js optimized deployment' },
-    { id: 'netlify', name: 'Netlify', icon: 'i-ph:cloud-arrow-up', description: 'Static site hosting' },
-    { id: 'github-pages', name: 'GitHub Pages', icon: 'i-ph:github-logo', description: 'Free static hosting' },
-    { id: 'firebase', name: 'Firebase Hosting', icon: 'i-ph:flame', description: 'Google hosting service' },
-    { id: 'aws-s3', name: 'AWS S3', icon: 'i-ph:cloud', description: 'Amazon cloud storage' },
-    { id: 'azure-static', name: 'Azure Static Web Apps', icon: 'i-ph:cloud', description: 'Microsoft hosting' }
+    { id: 'vercel', name: 'Vercel', icon: 'i-ph:cloud-arrow-up', description: 'Deploy to Vercel (real build)' },
+    { id: 'netlify', name: 'Netlify', icon: 'i-ph:cloud-arrow-up', description: 'Deploy to Netlify (real build)' },
+    { id: 'github', name: 'GitHub', icon: 'i-ph:github-logo', description: 'Push to GitHub repository' },
+    { id: 'firebase', name: 'Firebase Hosting', icon: 'i-ph:flame', description: 'Deploy to Firebase Hosting' },
+    { id: 'aws-s3', name: 'AWS S3', icon: 'i-ph:cloud', description: 'Upload static files to AWS S3' },
+    { id: 'cloudinary', name: 'Cloudinary', icon: 'i-ph:image', description: 'Upload assets to Cloudinary' },
+    { id: 'supabase-storage', name: 'Supabase Storage', icon: 'i-ph:database', description: 'Upload files to Supabase Storage' },
+    { id: 'docker', name: 'Docker', icon: 'i-ph:docker-logo', description: 'Build & push Docker container' },
+    { id: 'android-apk', name: 'Android APK', icon: 'i-ph:android-logo', description: 'Build real Android APK' },
+    { id: 'ui-design', name: 'UI Design', icon: 'i-ph:figma-logo', description: 'Export real UI design (Figma/React)' },
+    { id: 'express', name: 'Express.js Backend', icon: 'i-ph:node-logo', description: 'Generate real Express.js backend' },
+    { id: 'fastify', name: 'Fastify Backend', icon: 'i-ph:node-logo', description: 'Generate real Fastify backend' },
   ];
 
   const exportFormats = [
+    { id: 'jszip', name: 'JSZip', icon: 'i-ph:file-zip', description: 'Export real project files as ZIP' },
     { id: 'html', name: 'HTML', icon: 'i-ph:file-html', description: 'Static HTML files' },
     { id: 'react', name: 'React', icon: 'i-ph:code', description: 'React components' },
     { id: 'vue', name: 'Vue', icon: 'i-ph:code', description: 'Vue components' },
     { id: 'angular', name: 'Angular', icon: 'i-ph:code', description: 'Angular components' },
     { id: 'nextjs', name: 'Next.js', icon: 'i-ph:code', description: 'Next.js project' },
-    { id: 'nuxt', name: 'Nuxt.js', icon: 'i-ph:code', description: 'Nuxt.js project' }
+    { id: 'nuxt', name: 'Nuxt.js', icon: 'i-ph:code', description: 'Nuxt.js project' },
   ];
 
   const handleDeploy = () => {
