@@ -25,7 +25,7 @@ export const TAB_LABELS: Record<TabType, string> = {
   'service-status': 'Service Status',
   connection: 'Connection',
   'event-logs': 'Event Logs',
-  mcp: 'MCP Servers',
+  mcp: 'Task Manager',
 };
 
 export const TAB_DESCRIPTIONS: Record<TabType, string> = {

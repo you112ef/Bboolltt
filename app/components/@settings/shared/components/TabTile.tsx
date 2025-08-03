@@ -30,17 +30,17 @@ export const TabTile: React.FC<TabTileProps> = ({
     <Tooltip.Provider delayDuration={0}>
       <Tooltip.Root>
         <Tooltip.Trigger asChild>
-          <div className={classNames('min-h-[140px] list-none', className || '')}>
-            <div className="relative h-full rounded-lg border border-gray-700 p-0.5">
+          <div className={classNames('h-full list-none', className || '')}>
+            <div className="relative h-full rounded-xl border border-gray-700 p-0.5">
               <div
                 onClick={onClick}
                 className={classNames(
-                  'relative flex flex-col items-center justify-center h-full p-4 rounded-md',
-                  'bg-gray-800',
+                  'relative flex flex-col items-center justify-center h-full p-4 rounded-xl',
+                  'bg-gray-900',
                   'group cursor-pointer',
-                  'hover:bg-gray-700',
-                  'transition-colors duration-100 ease-out',
-                  isActive ? 'bg-gray-700' : '',
+                  'hover:bg-gray-800',
+                  'transition-all duration-200 ease-out',
+                  isActive ? 'bg-gray-800' : '',
                   isLoading ? 'cursor-wait opacity-70 pointer-events-none' : '',
                 )}
               >
@@ -48,35 +48,35 @@ export const TabTile: React.FC<TabTileProps> = ({
                 <div
                   className={classNames(
                     'relative',
-                    'w-12 h-12',
+                    'w-16 h-16',
                     'flex items-center justify-center',
-                    'rounded-lg',
-                    'bg-gray-700',
-                    'group-hover:bg-gray-600',
-                    'transition-all duration-100 ease-out',
-                    isActive ? 'bg-gray-600' : '',
+                    'rounded-2xl',
+                    'bg-gray-800',
+                    'group-hover:bg-gray-700',
+                    'transition-all duration-200 ease-out',
+                    isActive ? 'bg-gray-700' : '',
                   )}
                 >
                   <div
                     className={classNames(
                       TAB_ICONS[tab.id],
-                      'w-6 h-6',
+                      'w-8 h-8',
                       'text-white',
                       'group-hover:text-white',
-                      'transition-colors duration-100 ease-out',
+                      'transition-colors duration-200 ease-out',
                       isActive ? 'text-white' : '',
                     )}
                   />
                 </div>
 
                 {/* Label */}
-                <div className="flex flex-col items-center mt-3 w-full">
+                <div className="flex flex-col items-center mt-4 w-full">
                   <h3
                     className={classNames(
-                      'text-[14px] font-medium leading-snug',
+                      'text-base font-semibold leading-snug',
                       'text-white',
                       'group-hover:text-white',
-                      'transition-colors duration-100 ease-out',
+                      'transition-colors duration-200 ease-out',
                       isActive ? 'text-white' : '',
                     )}
                   >

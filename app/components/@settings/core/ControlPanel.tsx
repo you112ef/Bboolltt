@@ -202,7 +202,7 @@ export const ControlPanel = ({ open, onClose }: ControlPanelProps) => {
     <RadixDialog.Root open={open}>
       <RadixDialog.Portal>
         <div className="fixed inset-0 flex items-center justify-center z-[100] modern-scrollbar">
-          <RadixDialog.Overlay className="absolute inset-0 bg-black/80 backdrop-blur-sm transition-opacity duration-200" />
+          <RadixDialog.Overlay className="absolute inset-0 bg-black/90 backdrop-blur-sm transition-opacity duration-200" />
 
           <RadixDialog.Content
             aria-describedby={undefined}
@@ -212,7 +212,7 @@ export const ControlPanel = ({ open, onClose }: ControlPanelProps) => {
           >
             <div
               className={classNames(
-                'w-[1200px] h-[90vh]',
+                'w-[800px] h-[600px]',
                 'bg-black',
                 'rounded-2xl shadow-2xl',
                 'border border-gray-800',
@@ -229,9 +229,9 @@ export const ControlPanel = ({ open, onClose }: ControlPanelProps) => {
                     {(activeTab || showTabManagement) && (
                       <button
                         onClick={handleBack}
-                        className="flex items-center justify-center w-8 h-8 rounded-full bg-transparent hover:bg-purple-500/20 group transition-colors duration-150"
+                        className="flex items-center justify-center w-9 h-9 rounded-full bg-gray-800 hover:bg-gray-700 group transition-colors duration-150"
                       >
-                        <div className="i-ph:arrow-left w-4 h-4 text-gray-400 group-hover:text-purple-400 transition-colors" />
+                        <div className="i-ph:arrow-left w-4 h-4 text-white group-hover:text-gray-300 transition-colors" />
                       </button>
                     )}
                     <DialogTitle className="text-xl font-semibold text-white">
@@ -239,16 +239,16 @@ export const ControlPanel = ({ open, onClose }: ControlPanelProps) => {
                     </DialogTitle>
                   </div>
 
-                  <div className="flex items-center gap-6">
+                  <div className="flex items-center gap-4">
                     {/* Code and Close Icons */}
-                    <button className="flex items-center justify-center w-8 h-8 rounded-full bg-transparent hover:bg-purple-500/20 group transition-colors duration-150">
-                      <div className="i-ph:code w-4 h-4 text-white group-hover:text-purple-400 transition-colors" />
+                    <button className="flex items-center justify-center w-9 h-9 rounded-full bg-gray-800 hover:bg-gray-700 group transition-colors duration-150">
+                      <div className="i-ph:code w-4 h-4 text-white group-hover:text-gray-300 transition-colors" />
                     </button>
                     <button
                       onClick={handleClose}
-                      className="flex items-center justify-center w-8 h-8 rounded-full bg-transparent hover:bg-purple-500/20 group transition-all duration-200"
+                      className="flex items-center justify-center w-9 h-9 rounded-full bg-gray-800 hover:bg-gray-700 group transition-all duration-200"
                     >
-                      <div className="i-ph:x w-4 h-4 text-white group-hover:text-purple-400 transition-colors" />
+                      <div className="i-ph:x w-4 h-4 text-white group-hover:text-gray-300 transition-colors" />
                     </button>
                   </div>
                 </div>
@@ -275,17 +275,17 @@ export const ControlPanel = ({ open, onClose }: ControlPanelProps) => {
                     {activeTab ? (
                       getTabComponent(activeTab)
                     ) : (
-                      <div className="grid grid-cols-2 gap-3 relative">
+                      <div className="grid grid-cols-2 gap-6 max-w-md mx-auto">
                         {visibleTabs.map((tab, index) => (
                           <div
                             key={tab.id}
                             className={classNames(
-                              'aspect-[1.5/1] transition-transform duration-100 ease-out',
-                              'hover:scale-[1.01]',
+                              'w-[150px] h-[150px] transition-all duration-200 ease-out',
+                              'hover:scale-[1.02] hover:shadow-lg',
                             )}
                             style={{
-                              animationDelay: `${index * 30}ms`,
-                              animation: open ? 'fadeInUp 200ms ease-out forwards' : 'none',
+                              animationDelay: `${index * 50}ms`,
+                              animation: open ? 'fadeInUp 300ms ease-out forwards' : 'none',
                             }}
                           >
                             <TabTile
