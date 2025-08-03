@@ -1,7 +1,7 @@
 import type { TabType } from './types';
 
 export const TAB_ICONS: Record<TabType, string> = {
-  profile: 'i-ph:user-circle',
+  profile: 'i-ph:target',
   settings: 'i-ph:gear-six',
   notifications: 'i-ph:bell',
   features: 'i-ph:star',
@@ -9,7 +9,7 @@ export const TAB_ICONS: Record<TabType, string> = {
   'cloud-providers': 'i-ph:cloud',
   'local-providers': 'i-ph:laptop',
   'service-status': 'i-ph:activity-bold',
-  connection: 'i-ph:wifi-high',
+  connection: 'i-ph:caret-down',
   'event-logs': 'i-ph:list-bullets',
   mcp: 'i-ph:wrench',
 };
@@ -51,10 +51,10 @@ export const DEFAULT_TAB_CONFIG = [
   { id: 'connection', visible: true, window: 'user' as const, order: 4 },
   { id: 'notifications', visible: true, window: 'user' as const, order: 5 },
   { id: 'event-logs', visible: true, window: 'user' as const, order: 6 },
-  { id: 'mcp', visible: true, window: 'user' as const, order: 7 },
-  { id: 'profile', visible: true, window: 'user' as const, order: 8 },
+  { id: 'profile', visible: true, window: 'user' as const, order: 7 },
+  { id: 'settings', visible: true, window: 'user' as const, order: 8 },
   { id: 'service-status', visible: true, window: 'user' as const, order: 9 },
-  { id: 'settings', visible: true, window: 'user' as const, order: 10 },
+  { id: 'mcp', visible: true, window: 'user' as const, order: 10 },
 
   // User Window Tabs (In dropdown, initially hidden)
 ];
