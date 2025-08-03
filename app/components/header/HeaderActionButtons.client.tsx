@@ -21,12 +21,12 @@ export function HeaderActionButtons({ chatStarted }: HeaderActionButtonsProps) {
   const shouldShowButtons = !isStreaming && activePreview;
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-1 sm:gap-2">
       {/* Theme Switch */}
       <ThemeSwitch 
         size="sm" 
         variant="simple" 
-        className="mr-2"
+        className="mr-1 sm:mr-2"
       />
       
       {/* Existing Buttons */}

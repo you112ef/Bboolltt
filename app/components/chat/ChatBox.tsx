@@ -258,26 +258,26 @@ export const ChatBox: React.FC<ChatBoxProps> = (props) => {
             />
           )}
         </ClientOnly>
-        <div className="flex justify-between items-center text-sm p-4 pt-2">
-          <div className="flex gap-1 items-center">
+        <div className="flex justify-between items-center text-xs p-2 sm:p-3 md:p-4 pt-1 sm:pt-2">
+          <div className="flex gap-0.5 sm:gap-1 items-center">
             <ColorSchemeDialog designScheme={props.designScheme} setDesignScheme={props.setDesignScheme} />
             <McpTools />
-            <IconButton title="Upload file" className="transition-all" onClick={() => props.handleFileUpload()}>
-              <div className="i-ph:paperclip text-xl"></div>
+            <IconButton title="Upload file" className="transition-all w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8" onClick={() => props.handleFileUpload()}>
+              <div className="i-ph:paperclip text-sm sm:text-base md:text-lg"></div>
             </IconButton>
             <IconButton
               title="Enhance prompt"
               disabled={props.input.length === 0 || props.enhancingPrompt}
-              className={classNames('transition-all', props.enhancingPrompt ? 'opacity-100' : '')}
+              className={classNames('transition-all w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8', props.enhancingPrompt ? 'opacity-100' : '')}
               onClick={() => {
                 props.enhancePrompt?.();
                 toast.success('Prompt enhanced!');
               }}
             >
               {props.enhancingPrompt ? (
-                <div className="i-svg-spinners:90-ring-with-bg text-bolt-elements-loader-progress text-xl animate-spin"></div>
+                <div className="i-svg-spinners:90-ring-with-bg text-bolt-elements-loader-progress text-sm sm:text-base md:text-lg animate-spin"></div>
               ) : (
-                <div className="i-bolt:stars text-xl"></div>
+                <div className="i-bolt:stars text-sm sm:text-base md:text-lg"></div>
               )}
             </IconButton>
 
@@ -291,7 +291,7 @@ export const ChatBox: React.FC<ChatBoxProps> = (props) => {
               <IconButton
                 title="Discuss"
                 className={classNames(
-                  'transition-all flex items-center gap-1 px-1.5',
+                  'transition-all flex items-center gap-0.5 sm:gap-1 px-1 sm:px-1.5 w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8',
                   props.chatMode === 'discuss'
                     ? '!bg-bolt-elements-item-backgroundAccent !text-bolt-elements-item-contentAccent'
                     : 'bg-bolt-elements-item-backgroundDefault text-bolt-elements-item-contentDefault',
@@ -300,13 +300,13 @@ export const ChatBox: React.FC<ChatBoxProps> = (props) => {
                   props.setChatMode?.(props.chatMode === 'discuss' ? 'build' : 'discuss');
                 }}
               >
-                <div className={`i-ph:chats text-xl`} />
-                {props.chatMode === 'discuss' ? <span>Discuss</span> : <span />}
+                <div className={`i-ph:chats text-sm sm:text-base md:text-lg`} />
+                {props.chatMode === 'discuss' ? <span className="text-xs">Discuss</span> : <span />}
               </IconButton>
             )}
             <IconButton
               title="Model Settings"
-              className={classNames('transition-all flex items-center gap-1', {
+              className={classNames('transition-all flex items-center gap-0.5 sm:gap-1 w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8', {
                 'bg-bolt-elements-item-backgroundAccent text-bolt-elements-item-contentAccent':
                   props.isModelSettingsCollapsed,
                 'bg-bolt-elements-item-backgroundDefault text-bolt-elements-item-contentDefault':
@@ -315,14 +315,14 @@ export const ChatBox: React.FC<ChatBoxProps> = (props) => {
               onClick={() => props.setIsModelSettingsCollapsed(!props.isModelSettingsCollapsed)}
               disabled={!props.providerList || props.providerList.length === 0}
             >
-              <div className={`i-ph:caret-${props.isModelSettingsCollapsed ? 'right' : 'down'} text-lg`} />
+              <div className={`i-ph:caret-${props.isModelSettingsCollapsed ? 'right' : 'down'} text-sm sm:text-base md:text-lg`} />
               {props.isModelSettingsCollapsed ? <span className="text-xs">{props.model}</span> : <span />}
             </IconButton>
           </div>
           {props.input.length > 3 ? (
             <div className="text-xs text-bolt-elements-textTertiary">
-              Use <kbd className="kdb px-1.5 py-0.5 rounded bg-bolt-elements-background-depth-2">Shift</kbd> +{' '}
-              <kbd className="kdb px-1.5 py-0.5 rounded bg-bolt-elements-background-depth-2">Return</kbd> a new line
+              Use <kbd className="kdb px-1 py-0.5 rounded bg-bolt-elements-background-depth-2 text-xs">Shift</kbd> +{' '}
+              <kbd className="kdb px-1 py-0.5 rounded bg-bolt-elements-background-depth-2 text-xs">Return</kbd> a new line
             </div>
           ) : null}
           <SupabaseConnection />
