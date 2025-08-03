@@ -212,7 +212,7 @@ export const ControlPanel = ({ open, onClose }: ControlPanelProps) => {
           >
             <div
               className={classNames(
-                'w-[400px] h-[600px]',
+                'w-[500px] h-[700px]',
                 'bg-black',
                 'rounded-2xl shadow-2xl',
                 'border border-gray-800',
@@ -275,12 +275,12 @@ export const ControlPanel = ({ open, onClose }: ControlPanelProps) => {
                     {activeTab ? (
                       getTabComponent(activeTab)
                     ) : (
-                      <div className="grid grid-cols-2 gap-4">
+                      <div className="grid grid-cols-2 gap-6 max-w-md mx-auto">
                         {visibleTabs.map((tab, index) => (
                           <div
                             key={tab.id}
                             className={classNames(
-                              'w-[160px] h-[160px] transition-all duration-200 ease-out',
+                              'w-[180px] h-[180px] transition-all duration-200 ease-out',
                               'hover:scale-[1.02]',
                             )}
                             style={{
