@@ -30,7 +30,7 @@ interface DeploymentModalProps {
   onClose: () => void;
   projectName: string;
   services: DeploymentService[];
-  onDeploy: (serviceId: string) => Promise<void>;
+  onDeploy: (serviceId: string) => Promise<{ url?: string } | void>;
   onExport: (format: string) => Promise<void>;
 }
 
@@ -43,7 +43,7 @@ export function DeploymentModal({
   onExport,
 }: DeploymentModalProps) {
   const [selectedService, setSelectedService] = useState<string | null>(null);
-  const [deploymentProgress, setDeploymentProgress] = useState(0);
+  const [deploymentProgress, setDeploymentProgress] = useState<number | null>(null);
   const [showSuccess, setShowSuccess] = useState(false);
   const [deployedUrl, setDeployedUrl] = useState<string>('');
 
@@ -65,37 +65,22 @@ export function DeploymentModal({
 
   const handleDeploy = async (serviceId: string) => {
     setSelectedService(serviceId);
-    setDeploymentProgress(0);
+    setDeploymentProgress(null);
 
     try {
-      // Simulate deployment progress
-      const progressInterval = setInterval(() => {
-        setDeploymentProgress((prev) => {
-          if (prev >= 90) {
-            clearInterval(progressInterval);
-            return 90;
-          }
-
-          return prev + Math.random() * 20;
-        });
-      }, 500);
-
-      await onDeploy(serviceId);
-
-      clearInterval(progressInterval);
+      const result = (await onDeploy(serviceId)) || {};
       setDeploymentProgress(100);
       setShowSuccess(true);
 
-      // Mock deployed URL - in real implementation, this would come from the deployment service
-      setDeployedUrl(
-        `https://${projectName.toLowerCase()}-${Math.random().toString(36).substr(2, 8)}.${serviceId}.app`,
-      );
+      if (result.url) {
+        setDeployedUrl(result.url);
+      }
 
       toast.success(`Successfully deployed to ${deploymentServices.find((s) => s.id === serviceId)?.name}!`);
     } catch (error) {
       toast.error(`Deployment failed: ${error}`);
       setSelectedService(null);
-      setDeploymentProgress(0);
+      setDeploymentProgress(null);
     }
   };
 
@@ -131,9 +116,7 @@ export function DeploymentModal({
                   <div className="text-center">
                     <CloudArrowUpIcon className="mx-auto h-12 w-12 text-bolt-elements-textSecondary mb-4" />
                     <h2 className="text-2xl font-bold text-bolt-elements-textPrimary mb-2">Deploy Your Project</h2>
-                    <p className="text-bolt-elements-textSecondary">
-                      Choose a deployment service or export your project
-                    </p>
+                    <p className="text-bolt-elements-textSecondary">Choose a deployment service or export your project</p>
                   </div>
 
                   {selectedService && (
@@ -145,12 +128,10 @@ export function DeploymentModal({
                         </CardTitle>
                       </CardHeader>
                       <CardContent>
-                        <Progress value={deploymentProgress} className="mb-2" />
+                        <Progress value={deploymentProgress ?? 0} className="mb-2" />
                         <p className="text-sm text-bolt-elements-textSecondary">
-                          {deploymentProgress < 30 && 'Preparing deployment...'}
-                          {deploymentProgress >= 30 && deploymentProgress < 60 && 'Building project...'}
-                          {deploymentProgress >= 60 && deploymentProgress < 90 && 'Uploading files...'}
-                          {deploymentProgress >= 90 && 'Finalizing deployment...'}
+                          {deploymentProgress === null && 'Preparing deployment...'}
+                          {deploymentProgress === 100 && 'Finalizing deployment...'}
                         </p>
                       </CardContent>
                     </Card>
@@ -189,11 +170,7 @@ export function DeploymentModal({
                       <h3 className="text-lg font-semibold text-bolt-elements-textPrimary mb-4">Export Options</h3>
                       <div className="space-y-3">
                         {exportFormats.map((format) => (
-                          <Card
-                            key={format.id}
-                            className="cursor-pointer transition-all hover:shadow-md"
-                            onClick={() => handleExport(format.id)}
-                          >
+                          <Card key={format.id} className="cursor-pointer transition-all hover:shadow-md" onClick={() => handleExport(format.id)}>
                             <CardContent className="p-4">
                               <div className="flex items-center gap-3">
                                 <span className="text-2xl">{format.icon}</span>
@@ -212,61 +189,46 @@ export function DeploymentModal({
               ) : (
                 <motion.div
                   key="success"
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  className="text-center space-y-6"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="space-y-6"
                 >
-                  <CheckCircleIcon className="mx-auto h-16 w-16 text-green-500" />
-                  <div>
-                    <h2 className="text-2xl font-bold text-bolt-elements-textPrimary mb-2">Deployment Successful!</h2>
-                    <p className="text-bolt-elements-textSecondary">Your project has been deployed successfully</p>
+                  <div className="text-center">
+                    <CheckCircleIcon className="mx-auto h-12 w-12 text-green-500 mb-4" />
+                    <h2 className="text-2xl font-bold text-bolt-elements-textPrimary mb-2">Deployment Successful</h2>
+                    <p className="text-bolt-elements-textSecondary">Your project has been deployed successfully.</p>
                   </div>
 
-                  <Card>
-                    <CardHeader>
-                      <CardTitle className="flex items-center gap-2">
-                        <GlobeAltIcon className="h-5 w-5" />
-                        Live URL
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="flex items-center gap-2 p-3 bg-bolt-elements-background-depth-1 rounded-md">
-                        <code className="flex-1 text-sm text-bolt-elements-textPrimary">{deployedUrl}</code>
-                        <Button size="sm" variant="outline" onClick={() => copyToClipboard(deployedUrl)}>
-                          <DocumentDuplicateIcon className="h-4 w-4" />
-                        </Button>
-                      </div>
-                      <div className="flex gap-2 mt-4">
-                        <Button onClick={() => window.open(deployedUrl, '_blank')} className="flex-1">
-                          <GlobeAltIcon className="h-4 w-4 mr-2" />
-                          Visit Site
-                        </Button>
-                        <Button
-                          variant="outline"
-                          onClick={() => {
-                            // Generate QR code for mobile access
-                            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(deployedUrl)}`;
-                            window.open(qrUrl, '_blank');
-                          }}
-                        >
-                          <QrCodeIcon className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
+                  {deployedUrl && (
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="flex items-center gap-2">
+                          <GlobeAltIcon className="h-5 w-5" />
+                          Deployment URL
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="flex items-center justify-between gap-4">
+                          <a href={deployedUrl} target="_blank" rel="noreferrer" className="text-bolt-elements-textPrimary underline break-all">
+                            {deployedUrl}
+                          </a>
+                          <div className="flex items-center gap-2">
+                            <Button variant="secondary" onClick={() => copyToClipboard(deployedUrl)}>
+                              <DocumentDuplicateIcon className="h-4 w-4 mr-1" /> Copy
+                            </Button>
+                            <Button onClick={() => window.open(deployedUrl, '_blank', 'noopener,noreferrer')}>Open</Button>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  )}
 
-                  <div className="flex gap-3 justify-center">
-                    <Button
-                      variant="outline"
-                      onClick={() => {
-                        setShowSuccess(false);
-                        setSelectedService(null);
-                        setDeploymentProgress(0);
-                      }}
-                    >
-                      Deploy Another
+                  <div className="flex justify-end gap-2">
+                    <Button variant="secondary" onClick={() => window.location.reload()}>
+                      New Deployment
                     </Button>
-                    <Button onClick={onClose}>Done</Button>
+                    <Button onClick={onClose}>Close</Button>
                   </div>
                 </motion.div>
               )}

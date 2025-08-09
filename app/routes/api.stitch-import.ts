@@ -569,19 +569,30 @@ function generateClassesFromStyles(styles: Record<string, any>): string {
 }
 
 async function fetchStitchProject(projectId: string, accessToken: string) {
-  // This is a mock implementation since Stitch API details would depend on the actual service
-  const response = await fetch(`https://api.stitch.com/v1/projects/${projectId}`, {
+  const baseUrl = process.env.STITCH_API_BASE_URL || 'https://api.stitch.com';
+  const url = `${baseUrl.replace(/\/$/, '')}/v1/projects/${projectId}`;
+
+  const response = await fetch(url, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
       'Content-Type': 'application/json',
     },
   });
 
-  if (!response.ok) {
-    throw new Error(`Stitch API error: ${response.statusText}`);
+  if (response.status === 404) {
+    throw new Error('Stitch project not found');
   }
 
-  return response.json();
+  if (!response.ok) {
+    const text = await response.text().catch(() => '');
+    throw new Error(`Stitch API error (${response.status}): ${text || response.statusText}`);
+  }
+
+  try {
+    return await response.json();
+  } catch (e) {
+    throw new Error('Failed to parse Stitch API response as JSON');
+  }
 }
 
 export async function action({ request }: ActionFunctionArgs): Promise<Response> {

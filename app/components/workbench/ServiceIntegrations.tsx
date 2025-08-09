@@ -286,13 +286,15 @@ export function ServiceIntegrations({
       const result = (await response.json()) as any;
 
       if (result.success) {
+        const urlFromResult = result.url || result.deploy?.url || result.downloadUrl || result.site?.url;
+
         setServiceStatuses((prev) => ({
           ...prev,
           [serviceId]: {
             id: serviceId,
             name: services.deployment.find((s) => s.id === serviceId)?.name || serviceId,
             status: 'deployed',
-            url: result.downloadUrl || result.url,
+            url: urlFromResult,
             lastDeployed: new Date(),
           },
         }));
@@ -306,6 +308,9 @@ export function ServiceIntegrations({
           link.download = `${projectName}-${serviceId}.zip`;
           link.click();
         }
+
+        // Return URL to DeploymentModal so it can present it immediately
+        return { url: urlFromResult };
       } else {
         throw new Error(result.error || 'Deployment failed');
       }
