@@ -30,54 +30,38 @@ interface DiskInfo {
   error?: string;
 }
 
-const getDiskInfo = (): DiskInfo[] => {
-  // If we're in a Cloudflare environment and not in development, return error
-  if (!execSync && !isDevelopment) {
-    return [
-      {
-        filesystem: 'N/A',
-        size: 0,
-        used: 0,
-        available: 0,
-        percentage: 0,
-        mountpoint: 'N/A',
-        timestamp: new Date().toISOString(),
-        error: 'Disk information is not available in this environment',
-      },
-    ];
-  }
-
-  // If we're in development but not in Node environment, return mock data
-  if (!execSync && isDevelopment) {
-    // Generate random percentage between 40-60%
-    const percentage = Math.floor(40 + Math.random() * 20);
-    const totalSize = 500 * 1024 * 1024 * 1024; // 500GB
-    const usedSize = Math.floor((totalSize * percentage) / 100);
-    const availableSize = totalSize - usedSize;
-
-    return [
-      {
-        filesystem: 'MockDisk',
-        size: totalSize,
-        used: usedSize,
-        available: availableSize,
-        percentage,
-        mountpoint: '/',
-        timestamp: new Date().toISOString(),
-      },
-      {
-        filesystem: 'MockDisk2',
-        size: 1024 * 1024 * 1024 * 1024, // 1TB
-        used: 300 * 1024 * 1024 * 1024, // 300GB
-        available: 724 * 1024 * 1024 * 1024, // 724GB
-        percentage: 30,
-        mountpoint: '/data',
-        timestamp: new Date().toISOString(),
-      },
-    ];
-  }
-
+const getDiskInfo = async (): Promise<DiskInfo[]> => {
   try {
+    // Determine platform and try to import child_process only in Node environments
+    const isNodeEnv = typeof process !== 'undefined' && Boolean(process.platform) && Boolean(process.versions?.node);
+    let execSync: ((command: string, options?: { encoding?: BufferEncoding }) => string) | undefined;
+
+    if (isNodeEnv) {
+      try {
+        const childProc = await import('node:child_process');
+        execSync = childProc.execSync as unknown as typeof execSync;
+      } catch (e) {
+        // child_process not available in this runtime (e.g., Cloudflare Pages)
+        execSync = undefined;
+      }
+    }
+
+    // If execSync is not available, return an explicit error (no mock data)
+    if (!execSync) {
+      return [
+        {
+          filesystem: 'N/A',
+          size: 0,
+          used: 0,
+          available: 0,
+          percentage: 0,
+          mountpoint: 'N/A',
+          timestamp: new Date().toISOString(),
+          error: 'Disk information is not available in this environment',
+        },
+      ];
+    }
+
     // Different commands for different operating systems
     const platform = process.platform;
     let disks: DiskInfo[] = [];
@@ -86,8 +70,6 @@ const getDiskInfo = (): DiskInfo[] => {
       // macOS - use df command to get disk information
       try {
         const output = execSync('df -k', { encoding: 'utf-8' }).toString().trim();
-
-        // Skip the header line
         const lines = output.split('\n').slice(1);
 
         disks = lines.map((line: string) => {
@@ -138,8 +120,6 @@ const getDiskInfo = (): DiskInfo[] => {
       // Linux - use df command to get disk information
       try {
         const output = execSync('df -k', { encoding: 'utf-8' }).toString().trim();
-
-        // Skip the header line
         const lines = output.split('\n').slice(1);
 
         disks = lines.map((line: string) => {
@@ -190,7 +170,7 @@ const getDiskInfo = (): DiskInfo[] => {
       // Windows - use PowerShell to get disk information
       try {
         const output = execSync(
-          'powershell "Get-PSDrive -PSProvider FileSystem | Select-Object Name, Used, Free, @{Name=\'Size\';Expression={$_.Used + $_.Free}} | ConvertTo-Json"',
+          "powershell \"Get-PSDrive -PSProvider FileSystem | Select-Object Name, Used, Free, @{Name='Size';Expression={$_.Used + $_.Free}} | ConvertTo-Json\"",
           { encoding: 'utf-8' },
         )
           .toString()
@@ -266,7 +246,7 @@ const getDiskInfo = (): DiskInfo[] => {
 
 export const loader: LoaderFunction = async ({ request: _request }) => {
   try {
-    return json(getDiskInfo());
+    return json(await getDiskInfo());
   } catch (error) {
     console.error('Failed to get disk info:', error);
     return json(
@@ -289,7 +269,7 @@ export const loader: LoaderFunction = async ({ request: _request }) => {
 
 export const action = async ({ request: _request }: ActionFunctionArgs) => {
   try {
-    return json(getDiskInfo());
+    return json(await getDiskInfo());
   } catch (error) {
     console.error('Failed to get disk info:', error);
     return json(
